@@ -31,6 +31,45 @@ namespace SampleCsWpfPanel
     /// </summary>
     protected override Result RunCommand(RhinoDoc doc, RunMode mode)
     {
+      System.Guid panelId = SampleCsWpfPanelHost.PanelId;
+      bool bVisible = Rhino.UI.Panels.IsPanelVisible(panelId);
+
+      string prompt = (bVisible)
+        ? "Sample panel is visible. New value"
+        : "Sample Manager panel is hidden. New value";
+
+      Rhino.Input.Custom.GetOption go = new Rhino.Input.Custom.GetOption();
+      int hide_index = go.AddOption("Hide");
+      int show_index = go.AddOption("Show");
+      int toggle_index = go.AddOption("Toggle");
+
+      go.Get();
+      if (go.CommandResult() != Rhino.Commands.Result.Success)
+        return go.CommandResult();
+
+      Rhino.Input.Custom.CommandLineOption option = go.Option();
+      if (null == option)
+        return Rhino.Commands.Result.Failure;
+
+      int index = option.Index;
+
+      if (index == hide_index)
+      {
+        if (bVisible)
+          Rhino.UI.Panels.ClosePanel(panelId);
+      }
+      else if (index == show_index)
+      {
+        if (!bVisible)
+          Rhino.UI.Panels.OpenPanel(panelId);
+      }
+      else if (index == toggle_index)
+      {
+        if (bVisible)
+          Rhino.UI.Panels.ClosePanel(panelId);
+        else
+          Rhino.UI.Panels.OpenPanel(panelId);
+      }
       return Result.Success;
     }
   }

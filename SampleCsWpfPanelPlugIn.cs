@@ -48,5 +48,16 @@ namespace SampleCsWpfPanel
       : base(new SampleCsWpfPanelUserControl(), null) // No view model (for this example)
     {
     }
+
+    /// <summary>
+    /// Returns the ID of this panel.
+    /// </summary>
+    public static System.Guid PanelId
+    {
+      get
+      {
+        return typeof(SampleCsWpfPanelHost).GUID;
+      }
+    }
   }
 }
